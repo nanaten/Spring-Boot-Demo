@@ -1,4 +1,4 @@
-package com.nanaten.SpringBootDemo.entity
+package com.nanaten.SpringBootDemo.domain.entity
 
 import javax.persistence.*
 

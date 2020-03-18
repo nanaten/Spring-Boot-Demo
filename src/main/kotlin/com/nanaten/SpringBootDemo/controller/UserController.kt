@@ -1,7 +1,7 @@
 package com.nanaten.SpringBootDemo.controller
 
-import com.nanaten.SpringBootDemo.entity.UserEntity
-import com.nanaten.SpringBootDemo.repository.UserRepository
+import com.nanaten.SpringBootDemo.domain.entity.UserEntity
+import com.nanaten.SpringBootDemo.domain.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 

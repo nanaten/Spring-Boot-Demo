@@ -1,6 +1,6 @@
-package com.nanaten.SpringBootDemo.repository
+package com.nanaten.SpringBootDemo.domain.repository
 
-import com.nanaten.SpringBootDemo.entity.UserEntity
+import com.nanaten.SpringBootDemo.domain.entity.UserEntity
 import org.springframework.data.repository.CrudRepository
 
 interface UserRepository : CrudRepository<UserEntity, Int>

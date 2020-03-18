@@ -1,6 +1,6 @@
 package com.nanaten.SpringBootDemo.controller
 
-import com.nanaten.SpringBootDemo.entity.UserEntity
+import com.nanaten.SpringBootDemo.domain.entity.UserEntity
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
