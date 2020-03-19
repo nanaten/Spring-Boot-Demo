@@ -9,7 +9,6 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
 class ArticleController {
@@ -17,7 +16,6 @@ class ArticleController {
     lateinit var articleRepository: ArticleRepository
 
     @PostMapping("/")
-    @ResponseBody
     fun registerArticle(@ModelAttribute articleRequest: ArticleRequest): String {
         val article = Article(
                 articleRequest.id,
@@ -27,7 +25,7 @@ class ArticleController {
                 articleRequest.articleKey
         )
         articleRepository.save(article)
-        return "Saved"
+        return "redirect:/"
     }
 
     @GetMapping("/")
