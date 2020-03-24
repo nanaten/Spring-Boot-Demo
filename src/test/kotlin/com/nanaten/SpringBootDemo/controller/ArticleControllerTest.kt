@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
@@ -30,12 +31,12 @@ internal class ArticleControllerTest {
     @Test
     fun registerArticle() {
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/")
-                                .param("name", "test")
-                                .param("title", "test")
-                                .param("contents", "test")
-                                .param("articleKey", "test")
-                )
+                MockMvcRequestBuilders.post("/")
+                        .param("name", "test")
+                        .param("title", "test")
+                        .param("contents", "test")
+                        .param("articleKey", "test")
+        )
                 .andExpect(status().is3xxRedirection)
                 .andExpect(view().name("redirect:/"))
     }
@@ -43,10 +44,27 @@ internal class ArticleControllerTest {
     @Test
     fun getAttributeList() {
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/")
-                )
+                MockMvcRequestBuilders.get("/")
+        )
                 .andExpect(status().isOk)
                 .andExpect(model().attributeExists("articles"))
                 .andExpect(view().name("index"))
+    }
+
+    @Test
+    fun getArticleEditNotExistsId() {
+        mockMvc.perform(MockMvcRequestBuilders.get("/edit/" + 0))
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/"))
+
+    }
+
+    @Test
+    @Sql(statements = ["INSERT INTO articles (name, title, contents, article_key) VALUES ('test', 'test', 'test', 'test');"])
+    fun getArticleEditExistId() {
+        val latestArticle = articleController.articleRepository.findAll().last()
+        mockMvc.perform(MockMvcRequestBuilders.get("/edit/" + latestArticle.id))
+                .andExpect(status().isOk)
+                .andExpect(view().name("edit"))
     }
 }

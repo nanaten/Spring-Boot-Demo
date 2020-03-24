@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="/css/style.css"/>
+    <script src="js/index.js"></script>
     <title>サンプル掲示板</title>
 </head>
 <body>
@@ -45,7 +46,9 @@
     <div>
         <table border="1" class="Area_articles_table">
             <tr class="Area_article_title">
-                <td><label><input type="radio" name="article_check" th:text="*{id} + '.  ' + *{title}"/></label>
+                <td><label><input type="radio" name="article_check" th:data-id="*{id}"
+                                  th:text="*{id} + '.  ' + *{title}"/>
+                </label>
                 </td>
             </tr>
             <tr>
@@ -58,6 +61,12 @@
             </tr>
         </table>
     </div>
+</div>
+<div class="Area_change_article">
+    <form th:action="@{/}" th:method="get" name="form_change_article">
+        <button type="button" onclick="changeArticleSubmit('update')">編集</button>
+        <button type="button">削除</button>
+    </form>
 </div>
 </body>
 </html>
