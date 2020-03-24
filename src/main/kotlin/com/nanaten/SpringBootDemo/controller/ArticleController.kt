@@ -6,12 +6,11 @@ import com.nanaten.SpringBootDemo.request.ArticleRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.validation.BindingResult
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import java.util.*
 
 @Controller
 class ArticleController {
@@ -45,5 +44,27 @@ class ArticleController {
         } else {
             "redirect:/"
         }
+    }
+
+    @PostMapping("/update")
+    fun updateArticle(articleRequest: ArticleRequest): String {
+        if (!articleRepository.existsById(articleRequest.id)) {
+            return "redirect:/"
+        }
+
+        val article = articleRepository.findById(articleRequest.id).get()
+
+        if (articleRequest.articleKey != article.articleKey) {
+            return "redirect:/edit/${articleRequest.id}"
+        }
+
+        article.name = articleRequest.name
+        article.title = articleRequest.title
+        article.contents = articleRequest.contents
+        article.updateAt = Date()
+
+        articleRepository.save(article)
+
+        return "redirect:/"
     }
 }
