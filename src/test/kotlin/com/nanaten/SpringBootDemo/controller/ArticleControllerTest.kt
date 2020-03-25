@@ -114,4 +114,22 @@ internal class ArticleControllerTest {
                 .andExpect(status().is3xxRedirection)
                 .andExpect(view().name("redirect:/"))
     }
+
+    @Test
+    fun getDeleteConfirmNotExistsId() {
+        mockMvc.perform(MockMvcRequestBuilders.get("/delete/confirm/0"))
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/"))
+    }
+
+    @Test
+    @Sql(statements = ["INSERT INTO articles (name, title, contents, article_key) VALUES ('test', 'test', 'test', 'test');"])
+    fun getDeleteConfirmExistsId() {
+        val latestArticle = articleController.articleRepository.findAll().last()
+        mockMvc.perform(MockMvcRequestBuilders.get("/delete/confirm/${latestArticle.id}"))
+                .andExpect(status().isOk)
+                .andExpect(view().name("delete_confirm"))
+
+    }
+
 }
