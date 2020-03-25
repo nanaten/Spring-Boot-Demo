@@ -56,10 +56,10 @@ class ArticleController {
                        redirectAttributes: RedirectAttributes): String {
         return if (articleRepository.existsById(id)) {
             model.addAttribute("article", articleRepository.findById(id))
-            redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_ARTICLE_DOES_NOT_EXISTS)
-            redirectAttributes.addFlashAttribute(ALERT_CLASS, ALERT_CLASS_ERROR)
             "edit"
         } else {
+            redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_ARTICLE_DOES_NOT_EXISTS)
+            redirectAttributes.addFlashAttribute(ALERT_CLASS, ALERT_CLASS_ERROR)
             "redirect:/"
         }
     }
