@@ -19,6 +19,12 @@ function changeArticleSubmit(type) {
       changeArticleForm.action = "/edit/" + articleId;
       changeArticleForm.submit();
       break;
+    // ここから
+    case "delete":
+      changeArticleForm.action = "/delete/confirm/" + articleId;
+      changeArticleForm.submit();
+      break;
+    // ここまでを追加する
     default:
       break;
   }
