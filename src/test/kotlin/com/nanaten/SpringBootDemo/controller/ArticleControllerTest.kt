@@ -39,6 +39,8 @@ internal class ArticleControllerTest {
         )
                 .andExpect(status().is3xxRedirection)
                 .andExpect(view().name("redirect:/"))
+                .andExpect(flash().attributeExists(articleController.MESSAGE))
+                .andExpect(flash().attribute(articleController.MESSAGE, articleController.MESSAGE_REGISTER_NORMAL))
     }
 
     @Test
