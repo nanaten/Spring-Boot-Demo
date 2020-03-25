@@ -132,4 +132,49 @@ internal class ArticleControllerTest {
 
     }
 
+    @Test
+    fun deleteArticleNotExistArticle() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/delete")
+                .param("id", "0")
+                .param("name", "test")
+                .param("title", "test")
+                .param("contents", "test")
+                .param("articleKey", "err.")
+        )
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/"))
+    }
+
+    @Test
+    @Sql(statements = ["INSERT INTO articles (name, title, contents, article_key, register_at, update_at) VALUES ('test', 'test', 'test', 'test', now(), now());"])
+    fun deleteArticleNotMatchArticleKey() {
+        val latestArticle = articleController.articleRepository.findAll().last()
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/delete")
+                        .param("id", latestArticle.id.toString())
+                        .param("name", latestArticle.name)
+                        .param("title", latestArticle.title)
+                        .param("contents", latestArticle.contents)
+                        .param("articleKey", "err.")
+        )
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/delete/confirm/${latestArticle.id}"))
+    }
+
+    @Test
+    @Sql(statements = ["INSERT INTO articles (name, title, contents, article_key, register_at, update_at) VALUES ('test', 'test', 'test', 'test', now(), now());"])
+    fun deleteArticleExistArticle() {
+        val latestArticle = articleController.articleRepository.findAll().last()
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/delete")
+                        .param("id", latestArticle.id.toString())
+                        .param("name", latestArticle.name)
+                        .param("title", latestArticle.title)
+                        .param("contents", latestArticle.contents)
+                        .param("articleKey", latestArticle.articleKey)
+        )
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/"))
+    }
 }
