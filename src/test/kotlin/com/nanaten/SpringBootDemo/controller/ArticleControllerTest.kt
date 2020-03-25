@@ -146,7 +146,7 @@ internal class ArticleControllerTest {
     fun updateArticleRequestError() {
         mockMvc.perform(MockMvcRequestBuilders.post("/update"))
                 .andExpect(status().is3xxRedirection)
-                .andExpect(view().name("redirect/edit/0"))
+                .andExpect(view().name("redirect:/edit/0"))
                 .andExpect(flash().attributeExists(articleController.ERRORS))
                 .andExpect(flash().attributeExists(articleController.REQUEST))
     }
@@ -223,5 +223,14 @@ internal class ArticleControllerTest {
                 .andExpect(view().name("redirect:/"))
                 .andExpect(flash().attributeExists(articleController.MESSAGE))
                 .andExpect(flash().attribute(articleController.MESSAGE, articleController.MESSAGE_DELETE_NORMAL))
+    }
+
+    @Test
+    fun deleteArticleRequestError() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/delete"))
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/delete/confirm/0"))
+                .andExpect(flash().attributeExists(articleController.ERRORS))
+                .andExpect(flash().attributeExists(articleController.REQUEST))
     }
 }
