@@ -6,6 +6,16 @@ body {
 div.border_line {
   border-bottom: 2px solid gray;
 }
+div.alert {
+  text-align: center;
+  font-size: large;
+  font-style: italic;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+div.alert-error {
+  color: red;
+}
 /* ヘッダー */
 header.Area_header {
   text-align: center;
