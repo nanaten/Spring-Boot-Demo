@@ -132,6 +132,8 @@ internal class ArticleControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/delete/confirm/0"))
                 .andExpect(status().is3xxRedirection)
                 .andExpect(view().name("redirect:/"))
+                .andExpect(flash().attributeExists(articleController.MESSAGE))
+                .andExpect(flash().attribute(articleController.MESSAGE, articleController.MESSAGE_ARTICLE_DOES_NOT_EXISTS))
     }
 
     @Test
@@ -155,6 +157,10 @@ internal class ArticleControllerTest {
         )
                 .andExpect(status().is3xxRedirection)
                 .andExpect(view().name("redirect:/"))
+                .andExpect(flash().attributeExists(articleController.MESSAGE))
+                .andExpect(flash().attribute(articleController.MESSAGE, articleController.MESSAGE_ARTICLE_DOES_NOT_EXISTS))
+                .andExpect(flash().attribute(articleController.ALERT_CLASS, articleController.ALERT_CLASS_ERROR))
+
     }
 
     @Test
@@ -172,6 +178,9 @@ internal class ArticleControllerTest {
         )
                 .andExpect(status().is3xxRedirection)
                 .andExpect(view().name("redirect:/delete/confirm/${latestArticle.id}"))
+                .andExpect(flash().attributeExists(articleController.MESSAGE))
+                .andExpect(flash().attribute(articleController.MESSAGE, articleController.MESSAGE_ARTICLE_KEY_UNMATCH))
+                .andExpect(flash().attribute(articleController.ALERT_CLASS, articleController.ALERT_CLASS_ERROR))
     }
 
     @Test
@@ -188,5 +197,7 @@ internal class ArticleControllerTest {
         )
                 .andExpect(status().is3xxRedirection)
                 .andExpect(view().name("redirect:/"))
+                .andExpect(flash().attributeExists(articleController.MESSAGE))
+                .andExpect(flash().attribute(articleController.MESSAGE, articleController.MESSAGE_DELETE_NORMAL))
     }
 }

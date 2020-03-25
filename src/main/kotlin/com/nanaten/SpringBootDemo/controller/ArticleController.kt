@@ -23,6 +23,7 @@ class ArticleController {
     val MESSAGE_ARTICLE_KEY_UNMATCH = "投稿 KEY が一致しません。"
     val ALERT_CLASS_ERROR = "alert-error"
     val ALERT_CLASS = "alert_class"
+    val MESSAGE_DELETE_NORMAL = "正常に削除しました。"
 
     @Autowired
     lateinit var articleRepository: ArticleRepository
@@ -92,8 +93,11 @@ class ArticleController {
     }
 
     @GetMapping("/delete/confirm/{id}")
-    fun getDeleteConfirm(@PathVariable id: Int, model: Model): String {
+    fun getDeleteConfirm(@PathVariable id: Int, model: Model,
+                         redirectAttributes: RedirectAttributes): String {
         if (!articleRepository.existsById(id)) {
+            redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_ARTICLE_DOES_NOT_EXISTS)
+            redirectAttributes.addFlashAttribute(ALERT_CLASS, ALERT_CLASS_ERROR)
             return "redirect:/"
         }
         model.addAttribute("article", articleRepository.findById(id).get())
@@ -101,18 +105,24 @@ class ArticleController {
     }
 
     @PostMapping("/delete")
-    fun deleteArticle(@ModelAttribute articleRequest: ArticleRequest): String {
+    fun deleteArticle(@ModelAttribute articleRequest: ArticleRequest,
+                      redirectAttributes: RedirectAttributes): String {
         if (!articleRepository.existsById(articleRequest.id)) {
+            redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_ARTICLE_DOES_NOT_EXISTS)
+            redirectAttributes.addFlashAttribute(ALERT_CLASS, ALERT_CLASS_ERROR)
             return "redirect:/"
         }
 
         val article = articleRepository.findById(articleRequest.id).get()
         if (articleRequest.articleKey != article.articleKey) {
+            redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_ARTICLE_KEY_UNMATCH)
+            redirectAttributes.addFlashAttribute(ALERT_CLASS, ALERT_CLASS_ERROR)
             return "redirect:/delete/confirm/${article.id}"
         }
 
         articleRepository.deleteById(articleRequest.id)
 
+        redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_DELETE_NORMAL)
         return "redirect:/"
     }
 }
