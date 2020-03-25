@@ -6,6 +6,8 @@ import com.nanaten.SpringBootDemo.request.ArticleRequest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.validation.BindingResult
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
@@ -24,13 +26,22 @@ class ArticleController {
     val ALERT_CLASS_ERROR = "alert-error"
     val ALERT_CLASS = "alert_class"
     val MESSAGE_DELETE_NORMAL = "正常に削除しました。"
+    val ERRORS = "errors"
+    val REQUEST = "request"
+    val ARTICLE_REQUEST = "articleRequest"
 
     @Autowired
     lateinit var articleRepository: ArticleRepository
 
     @PostMapping("/")
-    fun registerArticle(@ModelAttribute articleRequest: ArticleRequest,
+    fun registerArticle(@Validated @ModelAttribute articleRequest: ArticleRequest,
+                        result: BindingResult,
                         redirectAttributes: RedirectAttributes): String {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute(ERRORS, result)
+            redirectAttributes.addFlashAttribute(REQUEST, articleRequest)
+            return "redirect:/"
+        }
         val article = Article(
                 articleRequest.id,
                 articleRequest.name,
@@ -47,7 +58,15 @@ class ArticleController {
     }
 
     @GetMapping("/")
-    fun getArticleList(model: Model): String {
+    fun getArticleList(@ModelAttribute articleRequest: ArticleRequest,
+                       model: Model): String {
+        if (model.containsAttribute(ERRORS)) {
+            val key = BindingResult.MODEL_KEY_PREFIX + ARTICLE_REQUEST
+            model.addAttribute(key, model.asMap()[ERRORS])
+        }
+        if (model.containsAttribute(REQUEST)) {
+            model.addAttribute(ARTICLE_REQUEST, model.asMap()[REQUEST])
+        }
         model.addAttribute("articles", articleRepository.findAll())
         return "index"
     }

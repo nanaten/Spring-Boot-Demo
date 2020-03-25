@@ -1,9 +1,20 @@
 package com.nanaten.SpringBootDemo.request
 
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.Size
+
 data class ArticleRequest(
         var id: Int = 0,
+        @field:NotBlank
+        @field:Size(min = 1, max = 50)
         var name: String = "",
+        @field:NotBlank
+        @field:Size(min = 1, max = 50)
         var title: String = "",
+        @field:NotBlank
+        @field:Size(min = 1, max = 1000)
         var contents: String = "",
+        @field:NotBlank
+        @field:Size(min = 1, max = 4)
         var articleKey: String = ""
 )

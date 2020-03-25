@@ -44,6 +44,21 @@ internal class ArticleControllerTest {
     }
 
     @Test
+    fun registerArticlRequestError() {
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/")
+                        .param("name", "")
+                        .param("title", "")
+                        .param("contents", "")
+                        .param("articleKey", "")
+        )
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/"))
+                .andExpect(flash().attributeExists(articleController.ERRORS))
+                .andExpect(flash().attributeExists(articleController.REQUEST))
+    }
+
+    @Test
     fun getAttributeList() {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/")
