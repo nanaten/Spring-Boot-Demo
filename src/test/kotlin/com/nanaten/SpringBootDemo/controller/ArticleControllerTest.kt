@@ -143,6 +143,15 @@ internal class ArticleControllerTest {
     }
 
     @Test
+    fun updateArticleRequestError() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/update"))
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect/edit/0"))
+                .andExpect(flash().attributeExists(articleController.ERRORS))
+                .andExpect(flash().attributeExists(articleController.REQUEST))
+    }
+
+    @Test
     fun getDeleteConfirmNotExistsId() {
         mockMvc.perform(MockMvcRequestBuilders.get("/delete/confirm/0"))
                 .andExpect(status().is3xxRedirection)

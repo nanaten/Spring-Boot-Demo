@@ -75,7 +75,16 @@ class ArticleController {
     fun getArticleEdit(@PathVariable id: Int, model: Model,
                        redirectAttributes: RedirectAttributes): String {
         return if (articleRepository.existsById(id)) {
-            model.addAttribute("article", articleRepository.findById(id))
+            if (model.containsAttribute(REQUEST)) {
+                model.addAttribute("article", model.asMap()[REQUEST])
+            } else {
+                model.addAttribute("article", articleRepository.findById(id))
+            }
+            if (model.containsAttribute(ERRORS)) {
+                val key = BindingResult.MODEL_KEY_PREFIX + "article"
+                model.addAttribute(key, model.asMap()[ERRORS])
+            }
+
             "edit"
         } else {
             redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_ARTICLE_DOES_NOT_EXISTS)
@@ -85,8 +94,15 @@ class ArticleController {
     }
 
     @PostMapping("/update")
-    fun updateArticle(articleRequest: ArticleRequest,
+    fun updateArticle(@Validated articleRequest: ArticleRequest,
+                      result: BindingResult,
                       redirectAttributes: RedirectAttributes): String {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute(ERRORS, result)
+            redirectAttributes.addFlashAttribute(REQUEST, articleRequest)
+
+            return "redirect:/edit/${articleRequest.id}"
+        }
         if (!articleRepository.existsById(articleRequest.id)) {
             redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_ARTICLE_DOES_NOT_EXISTS)
             redirectAttributes.addFlashAttribute(ALERT_CLASS, ALERT_CLASS_ERROR)
