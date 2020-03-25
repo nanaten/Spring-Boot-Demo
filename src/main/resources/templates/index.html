@@ -50,8 +50,10 @@
     <div>
         <table border="1" class="Area_articles_table">
             <tr class="Area_article_title">
-                <td><label><input type="radio" name="article_check" th:data-id="*{id}"
-                                  th:text="*{id} + '.  ' + *{title}"/>
+                <td><label>
+                    <input type="radio" name="article_check"
+                           onclick="scrollToAreaChangeArticle()"
+                           th:data-id="*{id}" th:text="*{id} + '.  ' + *{title}"/>
                 </label>
                 </td>
             </tr>
