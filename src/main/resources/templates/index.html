@@ -77,7 +77,7 @@
     <ul>
         <li th:class="${page.first} ? 'disabled' : ''">
             <span th:if="${page.first}"><<</span>
-            <a th:if="${not page.first}" th:href="@{${URL}(page=0}">></a>
+            <a th:if="${not page.first}" th:href="@{${URL}(page=0)}"><<</a>
         </li>
         <li th:class="${page.first} ? 'disabled' : ''">
             <span th:if="${page.first}"><</span>
