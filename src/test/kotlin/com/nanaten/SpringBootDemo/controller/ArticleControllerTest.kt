@@ -59,12 +59,12 @@ internal class ArticleControllerTest {
     }
 
     @Test
-    fun getAttributeList() {
+    fun getArticleList() {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/")
         )
                 .andExpect(status().isOk)
-                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attributeExists("page"))
                 .andExpect(view().name("index"))
     }
 

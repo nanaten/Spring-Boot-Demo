@@ -88,5 +88,30 @@ table.Area_articles_table tbody tr.Area_article_title label input {
 
 /* 記事の編集削除エリア */
 div.Area_change_article {
-    width: 100%; text-align: center; margin-top: 10px; margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+/* ページング */
+div.Area_pager {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+div.Area_pager a:link {
+  color: black;
+  text-decoration-line: underline;
+}
+div.Area_pager a:visited {
+  color: black;
+}
+div.Area_pager ul {
+  padding: 0px;
+}
+div.Area_pager ul li {
+  display: inline;
+}
+div.Area_pager ul li.disabled {
+  color: gray;
 }
