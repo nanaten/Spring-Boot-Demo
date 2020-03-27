@@ -76,20 +76,20 @@
     <div class="border_line"></div>
     <ul>
         <li th:class="${page.first} ? 'disabled' : ''">
-            <span th:if="${page.first}"><<</span>
-            <a th:if="${not page.first}" th:href="@{${URL}(page=0)}"><<</a>
+            <span th:if="${page.first}">＜＜</span>
+            <a th:if="${not page.first}" th:href="@{${URL}(page=0)}">＜＜</a>
         </li>
         <li th:class="${page.first} ? 'disabled' : ''">
-            <span th:if="${page.first}"><</span>
-            <a th:if="${not page.first}" th:href="@{${URL}(page=(${page.number}-1))}"><</a>
+            <span th:if="${page.first}">＜</span>
+            <a th:if="${not page.first}" th:href="@{${URL}(page=(${page.number}-1))}">＜</a>
         </li>
         <li th:class="${page.last} ? 'disabled' : ''">
-            <span th:if="${page.last}">></span>
-            <a th:if="${not page.last}" th:href="@{${URL}(page=(${page.number}+1))}">></a>
+            <span th:if="${page.last}">＞</span>
+            <a th:if="${not page.last}" th:href="@{${URL}(page=(${page.number}+1))}">＞</a>
         </li>
         <li th:class="${page.last} ? 'disabled' : ''">
-            <span th:if="${page.last}">>></span>
-            <a th:if="${not page.last}" th:href="@{${URL}(page=(${page.totalPages}-1))}">>></a>
+            <span th:if="${page.last}">＞＞</span>
+            <a th:if="${not page.last}" th:href="@{${URL}(page=(${page.totalPages}-1))}">＞＞</a>
         </li>
     </ul>
     <div>
