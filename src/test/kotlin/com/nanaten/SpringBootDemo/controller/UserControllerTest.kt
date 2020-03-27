@@ -1,6 +1,6 @@
 package com.nanaten.SpringBootDemo.controller
 
-import com.nanaten.SpringBootDemo.domain.entity.UserEntity
+import com.nanaten.SpringBootDemo.domain.entity.User
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,8 +35,8 @@ internal class UserControllerTest {
     @Test
     fun addNewUser() {
         mockMvc.perform(
-                        post("/user/add")
-                                .param("name", "unit_test"))
+                post("/user/add")
+                        .param("name", "unit_test"))
                 .andExpect(status().isOk)
                 .andExpect(content().string("Save Success."))
     }
@@ -51,13 +51,13 @@ internal class UserControllerTest {
     @Test
     @Sql(statements = ["INSERT INTO users (name) VALUES ('update_data');"])
     fun updateUser() {
-        val lastUser: UserEntity = target.userRepository.findAll().last()
+        val lastUser: User = target.userRepository.findAll().last()
 
         mockMvc.perform(
-                        post("/user/update")
-                                .param("id", lastUser.id.toString())
-                                .param("name", "updated!!!")
-                )
+                post("/user/update")
+                        .param("id", lastUser.id.toString())
+                        .param("name", "updated!!!")
+        )
                 .andExpect(status().isOk)
                 .andExpect(content().string("Update Success."))
     }
@@ -66,8 +66,8 @@ internal class UserControllerTest {
     @Test
     fun deleteNoUser() {
         mockMvc.perform(
-                        post("/user/delete").param("id", "-1")
-                )
+                post("/user/delete").param("id", "-1")
+        )
                 .andExpect(status().isOk)
                 .andExpect(content().string("User ID Unavailable."))
     }
@@ -76,10 +76,10 @@ internal class UserControllerTest {
     @Test
     @Sql(statements = ["INSERT INTO users (name) VALUES ('delete_data');"])
     fun deleteUser() {
-        val lastUser: UserEntity = target.userRepository.findAll().last()
+        val lastUser: User = target.userRepository.findAll().last()
         mockMvc.perform(
-                        post("/user/delete").param("id", lastUser.id.toString())
-                )
+                post("/user/delete").param("id", lastUser.id.toString())
+        )
                 .andExpect(status().isOk)
                 .andExpect(content().string("Delete Success."))
     }

@@ -1,5 +1,6 @@
 package com.nanaten.SpringBootDemo.config
 
+import com.nanaten.SpringBootDemo.service.UserDetailsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -13,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 @EnableWebSecurity
 class BbsAdminWebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
-    lateinit var passwordEncoder: PasswordEncoder
+    lateinit var userDetailsService: UserDetailsServiceImpl
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
@@ -21,11 +22,6 @@ class BbsAdminWebSecurityConfig : WebSecurityConfigurerAdapter() {
     }
 
     override fun configure(auth: AuthenticationManagerBuilder?) {
-
-        auth?.inMemoryAuthentication()
-                ?.withUser("admin")
-                ?.password("\$2a\$10\$CPNJ.PlWH8k1aMhC6ytjIuwxYuLWKMXTP3H6h.LRnpumtccpvXEGy")
-                ?.authorities("ROLE_ADMIN")
-
+        auth?.userDetailsService(userDetailsService)
     }
 }

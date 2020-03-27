@@ -1,6 +1,6 @@
 package com.nanaten.SpringBootDemo.controller
 
-import com.nanaten.SpringBootDemo.domain.entity.UserEntity
+import com.nanaten.SpringBootDemo.domain.entity.User
 import com.nanaten.SpringBootDemo.domain.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -13,18 +13,18 @@ class UserController {
 
     @PostMapping("/add")
     fun addNewUser(@RequestParam name: String): String {
-        userRepository.save(UserEntity(name = name))
+        userRepository.save(User(name = name))
         return "Save Success."
     }
 
     @GetMapping("/all")
-    fun getAllUsers(): Iterable<UserEntity>? {
+    fun getAllUsers(): Iterable<User>? {
         return userRepository.findAll()
     }
 
     @PostMapping("/update")
     fun updateUser(@RequestParam id: Int, name: String): String {
-        userRepository.save(UserEntity(id, name))
+        userRepository.save(User(id, name))
         return "Update Success."
     }
 
