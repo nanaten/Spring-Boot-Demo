@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head></head>
+<body>
+<div class="Area_articles" th:fragment="fragment-articles" th:each="article:${page}" th:object="${article}">
+    <div>
+        <table border="1" class="Area_articles_table">
+            <tr class="Area_article_title">
+                <td><label>
+                    <input type="radio" name="article_check"
+                           onclick="scrollToAreaChangeArticle()"
+                           th:data-id="*{id}" th:text="*{id} + '.  ' + *{title}"/>
+                </label>
+                </td>
+            </tr>
+            <tr>
+                <td th:text="'名前:' + *{name} + ' 投稿日:' + ${#dates.format(article.registerAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
+            </tr>
+            <tr>
+                <td>
+                    <pre th:text="*{contents}"></pre>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
