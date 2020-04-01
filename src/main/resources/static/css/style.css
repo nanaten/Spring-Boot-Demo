@@ -115,3 +115,6 @@ div.Area_pager ul li {
 div.Area_pager ul li.disabled {
   color: gray;
 }
+tr.Area_article_row_right {
+  text-align: right;
+}

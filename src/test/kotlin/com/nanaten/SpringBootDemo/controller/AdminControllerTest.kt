@@ -32,5 +32,6 @@ internal class AdminControllerTest {
                 .andExpect(status().isOk)
                 .andExpect(model().attributeExists("page"))
                 .andExpect(view().name("admin_index"))
+                .andExpect(model().attributeExists("isAdmin"))
     }
 }

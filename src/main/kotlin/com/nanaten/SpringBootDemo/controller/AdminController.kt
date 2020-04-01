@@ -23,6 +23,7 @@ class AdminController {
 
         val articles = articleRepository.findAll(pageable)
         model.addAttribute("page", articles)
+        model.addAttribute("isAdmin", true)
         return "admin_index"
     }
 }

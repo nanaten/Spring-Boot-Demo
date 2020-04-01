@@ -21,6 +21,13 @@
                     <pre th:text="*{contents}"></pre>
                 </td>
             </tr>
+            <tr th:if="${isAdmin}" class="Area_article_row_right">
+                <td>
+                    <button type="button" th:onclick="'articleDelete(' + *{id} + ')'">
+                        削除
+                    </button>
+                </td>
+            </tr>
         </table>
     </div>
 </div>
