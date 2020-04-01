@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>サンプル掲示板 管理者画面</title>
     <link rel="stylesheet" href="/css/style.css"/>
+    <script src="/js/admin_index.js"></script>
 </head>
 <body>
 <header class="Area_header">サンプル掲示板 管理者画面</header>
@@ -13,5 +14,7 @@
 <div class="border_line"></div>
 <span th:replace="fragments/articles :: fragment-articles"></span>
 <span th:replace="fragments/paging :: fragment-article-paging"></span>
+<form th:action="@{/admin/article/delete/}" th:method="post"
+    name="form_delete_article"></form>
 </body>
 </html>
