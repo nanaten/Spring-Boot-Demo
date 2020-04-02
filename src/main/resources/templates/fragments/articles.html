@@ -6,11 +6,18 @@
     <div>
         <table border="1" class="Area_articles_table">
             <tr class="Area_article_title">
-                <td><label>
-                    <input type="radio" name="article_check"
+                <td>
+                    <label th:unless="${isAdmin}">
+                        <input type="radio" name="article_check"
+                               onclick="scrollToAreaChangeArticle()"
+                               th:data-id="*{id}" th:text="*{id} + '.  ' + *{title}"/>
+                    </label>
+                    <input th:if="${isAdmin}"
+                           type="checkbox"
+                           name="article_checks"
                            onclick="scrollToAreaChangeArticle()"
-                           th:data-id="*{id}" th:text="*{id} + '.  ' + *{title}"/>
-                </label>
+                           th:value="*{id}"
+                           th:text="*{id} + '.  ' + *{title}"/>
                 </td>
             </tr>
             <tr>

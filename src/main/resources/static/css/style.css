@@ -118,3 +118,10 @@ div.Area_pager ul li.disabled {
 tr.Area_article_row_right {
   text-align: right;
 }
+/* まとめて削除 */ 
+div.Area_multi_delete {
+  width: 100%; 
+  text-align: center; 
+  margin-top: 10px; 
+  margin-bottom: 10px;
+}
