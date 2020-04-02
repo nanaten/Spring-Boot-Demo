@@ -63,4 +63,32 @@ internal class AdminControllerTest {
                 .andExpect(flash().attributeExists(adminController.MESSAGE))
                 .andExpect(flash().attribute(adminController.MESSAGE, adminController.MESSAGE_DELETE_NORMAL))
     }
+
+    @Test
+    @WithMockUser(username = "admin")
+    fun multiDeleteNotSelectedArticle() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/article/deletes").with(csrf()))
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/admin/index"))
+                .andExpect(flash().attributeExists(adminController.MESSAGE))
+                .andExpect(flash().attribute(adminController.MESSAGE, adminController.MESSAGE_ARTICLE_NOT_SELECTED))
+    }
+
+    @Test
+    @Sql(statements = [
+        "INSERT INTO articles (name, title, contents, article_key) VALUES ('test', 'test', 'test', 'test');",
+        "INSERT INTO articles (name, title, contents, article_key) VALUES ('test', 'test', 'test', 'test');",
+        "INSERT INTO articles (name, title, contents, article_key) VALUES ('test', 'test', 'test', 'test');"
+    ])
+    @WithMockUser(username = "admin")
+    fun multiDeleteSelectedArticle() {
+        val latestArticles = adminController.articleRepository.findAll()
+        val ids = latestArticles.map { it.id }.joinToString(",")
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/article/deletes").with(csrf()).param("article_checks", ids))
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/admin/index"))
+                .andExpect(flash().attributeExists(adminController.MESSAGE))
+                .andExpect(flash().attribute(adminController.MESSAGE, adminController.MESSAGE_DELETE_NORMAL))
+    }
 }
