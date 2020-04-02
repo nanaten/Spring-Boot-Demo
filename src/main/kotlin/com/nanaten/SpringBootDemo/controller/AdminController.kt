@@ -16,11 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
 class AdminController {
 
     val MESSAGE_ARTICLE_DOES_NOT_EXISTS = "対象の記事が見つかりませんでした"
+    val MESSAGE_ARTICLE_NOT_SELECTED = "削除する記事を選択してください"
     val MESSAGE = "message"
     val MESSAGE_DELETE_NORMAL = "正常に削除しました"
     val ALERT_CLASS_ERROR = "alert-error"
     val ALERT_CLASS = "alert_class"
-
     val PAGE_SIZE: Int = 10
 
     @Autowired
@@ -47,6 +47,24 @@ class AdminController {
 
         articleRepository.deleteById(id)
 
+        redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_DELETE_NORMAL)
+        return "redirect:/admin/index"
+    }
+
+
+    @PostMapping("/admin/article/deletes")
+    fun deleteArticles(
+            @RequestParam(value = "article_checks", required = false)
+            checkboxValues: List<Int>?,
+            redirectAttributes: RedirectAttributes
+    ): String {
+        if (checkboxValues == null || checkboxValues.isEmpty()) {
+            redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_ARTICLE_NOT_SELECTED)
+            redirectAttributes.addFlashAttribute(ALERT_CLASS, ALERT_CLASS_ERROR)
+            return "redirect:/admin/index"
+        }
+
+        articleRepository.deleteByIdIn(checkboxValues)
         redirectAttributes.addFlashAttribute(MESSAGE, MESSAGE_DELETE_NORMAL)
         return "redirect:/admin/index"
     }
