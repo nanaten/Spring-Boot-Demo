@@ -8,7 +8,12 @@
     <title>サンプル掲示板</title>
 </head>
 <body>
-<header class="Area_header">サンプル掲示板</header>
+<header class="Area_header">
+    <div class="Area_header_menu">
+        <a href="/user/index">ユーザーログイン</a> <a href="/admin/index">管理者モード</a>
+    </div>
+    サンプル掲示板
+</header>
 <div th:class="'alert ' + *{alert_class}" role="alert"
      th:id="flash-message" th:if="${message}" th:text="${message}">
 

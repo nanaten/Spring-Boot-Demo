@@ -125,3 +125,8 @@ div.Area_multi_delete {
   margin-top: 10px; 
   margin-bottom: 10px;
 }
+/* ヘッダーメニュー */ 
+div.Area_header_menu { 
+  text-align: right;
+  font-size: small; 
+}
