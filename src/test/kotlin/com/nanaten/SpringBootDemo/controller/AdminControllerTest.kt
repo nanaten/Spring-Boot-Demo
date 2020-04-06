@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
@@ -28,7 +28,7 @@ internal class AdminControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin")
+    @WithUserDetails("admin")
     fun authenticationTest() {
         mockMvc.perform(MockMvcRequestBuilders.get("/admin/index"))
                 .andExpect(status().isOk)
@@ -38,7 +38,7 @@ internal class AdminControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin")
+    @WithUserDetails("admin")
     fun singleDeleteNotExistsArticle() {
         mockMvc.perform(MockMvcRequestBuilders.post("/admin/article/delete/0")
                 .with(csrf())
@@ -51,7 +51,7 @@ internal class AdminControllerTest {
 
     @Test
     @Sql(statements = ["INSERT INTO articles (name, title, contents, article_key) VALUES ('test', 'test', 'test', 'test');"])
-    @WithMockUser(username = "admin")
+    @WithUserDetails("admin")
     fun singleDeleteExistsArticle() {
         val latestArticle = adminController.articleRepository.findAll().last()
 
@@ -65,7 +65,7 @@ internal class AdminControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin")
+    @WithUserDetails("admin")
     fun multiDeleteNotSelectedArticle() {
         mockMvc.perform(MockMvcRequestBuilders.post("/admin/article/deletes").with(csrf()))
                 .andExpect(status().is3xxRedirection)
@@ -80,7 +80,7 @@ internal class AdminControllerTest {
         "INSERT INTO articles (name, title, contents, article_key) VALUES ('test', 'test', 'test', 'test');",
         "INSERT INTO articles (name, title, contents, article_key) VALUES ('test', 'test', 'test', 'test');"
     ])
-    @WithMockUser(username = "admin")
+    @WithUserDetails("admin")
     fun multiDeleteSelectedArticle() {
         val latestArticles = adminController.articleRepository.findAll()
         val ids = latestArticles.map { it.id }.joinToString(",")
