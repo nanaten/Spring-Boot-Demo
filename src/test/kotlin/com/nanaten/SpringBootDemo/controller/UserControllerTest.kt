@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -111,5 +112,39 @@ internal class UserControllerTest {
                 .andExpect(view().name("redirect:/user/signup"))
                 .andExpect(flash().attributeExists("errors"))
                 .andExpect(flash().attributeExists("request"))
+    }
+
+    @Test
+    fun getUserLogin() {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/login"))
+                .andExpect(status().isOk)
+    }
+
+    @Test
+    // @Sql(statements = ["INSERT INTO users (name, email, password, role) VALUES ('test3', 'test3@example.com', '\$2a\$10\$MMnbIXYB4BQI88yiKpiR2eiIIHiUEymGMyWqWlp01Iz.aqbD3ud4i', 'USER');"])
+    fun UserLoginAuth() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/login/auth")
+                .with(csrf())
+                .param("email", "test3@example.com")
+                .param("password", "test3")
+        )
+                .andExpect(status().is3xxRedirection)
+                .andExpect(redirectedUrl("/"))
+    }
+
+    @Test
+    // @Sql(statements = ["INSERT INTO users (name, email, password, role) VALUES ('test4', 'test4@example.com', 'dummy', 'USER')"])
+    @WithUserDetails(value = "test4")
+    fun authentication() {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/index"))
+                .andExpect(status().isOk)
+    }
+
+    @Test
+    // @Sql(statements = ["INSERT INTO users (name, email, password, role) VALUES ('test5', 'test5@example.com', 'dummy', 'USER')"])
+    @WithUserDetails(value = "test5")
+    fun getUserIndex() {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/index"))
+                .andExpect(status().isOk)
     }
 }
