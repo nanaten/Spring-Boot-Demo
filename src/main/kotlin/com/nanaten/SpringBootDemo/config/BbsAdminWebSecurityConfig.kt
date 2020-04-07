@@ -25,6 +25,8 @@ class BbsAdminWebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .antMatchers("/admin/login").permitAll()
                 .antMatchers("/admin/**").hasRole(UserRole.ADMIN.name)
                 .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().accessDeniedPage("/admin/login")
 
         // ログイン設定
         http.formLogin()

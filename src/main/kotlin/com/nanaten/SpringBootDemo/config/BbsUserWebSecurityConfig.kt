@@ -47,6 +47,8 @@ class BbsUserWebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .antMatchers("/user/**").hasRole(UserRole.USER.name)
                 // 条件に一致するURLは認可が必要
                 .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().accessDeniedPage("/user/login")
 
         // ログイン設定 (独自の認証画面を指定する)
         http.formLogin()
@@ -61,7 +63,8 @@ class BbsUserWebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .passwordParameter("password")
         // ログアウト
         http.logout()
-                .logoutRequestMatcher(AntPathRequestMatcher("/logout**")).logoutSuccessUrl("/")
+                .logoutRequestMatcher(AntPathRequestMatcher("/user/logout**"))
+                .logoutSuccessUrl("/")
     }
 
     override fun configure(auth: AuthenticationManagerBuilder?) {
