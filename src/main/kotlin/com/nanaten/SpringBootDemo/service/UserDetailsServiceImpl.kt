@@ -14,12 +14,17 @@ class UserDetailsServiceImpl : UserDetailsService {
     lateinit var userRepository: UserRepository
 
     override fun loadUserByUsername(username: String?): UserDetails {
-
-        val user: User? = username?.let { userRepository.findByName(it) }
+        var user: User? = null
+        username?.let {
+            user = userRepository.findByName(it)
+            if (user == null) {
+                user = userRepository.findByEmail(it)
+            }
+        }
 
         user ?: throw UsernameNotFoundException(username)
 
-        return UserDetailsImpl(user)
+        return UserDetailsImpl(user as User)
 
     }
 }
