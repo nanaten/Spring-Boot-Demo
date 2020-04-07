@@ -72,4 +72,19 @@ class UserController {
 
         return "redirect:/user/login"
     }
+
+    @GetMapping("/index")
+    fun getUserIndex(): String {
+        return "user_index"
+    }
+
+    @PostMapping("/login/auth")
+    fun userLogin(): String {
+        return "redirect:/user/index"
+    }
+
+    @GetMapping("/logout")
+    fun getUserLogout(): String {
+        return "redirect:/"
+    }
 }
