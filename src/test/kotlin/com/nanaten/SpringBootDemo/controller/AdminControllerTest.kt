@@ -91,4 +91,16 @@ internal class AdminControllerTest {
                 .andExpect(flash().attributeExists(adminController.MESSAGE))
                 .andExpect(flash().attribute(adminController.MESSAGE, adminController.MESSAGE_DELETE_NORMAL))
     }
+
+    @Test
+    @Sql(statements = ["INSERT INTO users (name, email, password, role) VALUES ('admin1', 'admin1@example.com', '\$2a\$10\$CPNJ.PlWH8k1aMhC6ytjIuwxYuLWKMXTP3H6h.LRnpumtccpvXEGy', 'USER');"])
+    fun adminLoginAuth() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/login/auth")
+                .with(csrf())
+                .param("username", "admin1")
+                .param("password", "root")
+        )
+                .andExpect(status().is3xxRedirection)
+                .andExpect(redirectedUrl("/"))
+    }
 }
