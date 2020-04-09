@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html" ; charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -11,7 +11,12 @@
     <div class="Area_header_menu">
         <a href="/user/logout">ログアウト</a>
     </div>
-    サンプル掲示板 ユーザー画面
+    <p>サンプル掲示板 ユーザー画面</p>
+    <div class="Area_info" th:text="|ログインユーザー名：${user.name}|"></div>
 </header>
+<div class="border_line"></div>
+<span th:replace="fragments/articles :: fragment-articles"></span>
+<span th:replace="fragments/paging :: fragment-article-paging"></span>
+<div class="border_line"></div>
 </body>
 </html>
