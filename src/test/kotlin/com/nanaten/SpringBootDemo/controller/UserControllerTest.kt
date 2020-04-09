@@ -138,6 +138,8 @@ internal class UserControllerTest {
     fun authentication() {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/index"))
                 .andExpect(status().isOk)
+                .andExpect(model().attributeExists("page"))
+                .andExpect(model().attributeExists("user"))
     }
 
     @Test
