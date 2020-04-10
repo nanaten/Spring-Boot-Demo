@@ -17,6 +17,9 @@ internal class UserControllerTest {
     @Autowired
     lateinit var mockMvc: MockMvc
 
+    @Autowired
+    lateinit var userController: UserController
+
     @Test
     fun getUserSignup() {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/signup"))
@@ -148,5 +151,39 @@ internal class UserControllerTest {
     fun getUserIndex() {
         mockMvc.perform(MockMvcRequestBuilders.get("/user/index"))
                 .andExpect(status().isOk)
+    }
+
+    @Test
+    // @Sql(statements = ["INSERT INTO users (name, email, password, role) VALUES ('test6', 'test6@example.com', 'dummy', 'USER');"])
+    @WithUserDetails("test6")
+    fun registerArticle() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/article/register")
+                .with(csrf())
+                .param("name", "test")
+                .param("title", "test")
+                .param("contents", "test")
+                .param("articleKey", "test")
+        )
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/user/index"))
+                .andExpect(flash().attributeExists(userController.MESSAGE))
+                .andExpect(flash().attribute(userController.MESSAGE, userController.MESSAGE_REGISTER_NORMAL))
+    }
+
+    @Test
+    // @Sql(statements = ["INSERT INTO users (name, email, password, role) VALUES ('test7', 'test7@example.com', 'dummy', 'USER');"])
+    @WithUserDetails("test7")
+    fun registerArticleRequestError() {
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/article/register")
+                .with(csrf())
+                .param("name", "")
+                .param("title", "")
+                .param("contents", "")
+                .param("articleKey", "")
+        )
+                .andExpect(status().is3xxRedirection)
+                .andExpect(view().name("redirect:/user/index"))
+                .andExpect(flash().attributeExists(userController.ERRORS))
+                .andExpect(flash().attributeExists(userController.REQUEST))
     }
 }
