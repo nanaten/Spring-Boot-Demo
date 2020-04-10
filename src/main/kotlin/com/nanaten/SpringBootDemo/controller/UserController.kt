@@ -1,9 +1,11 @@
 package com.nanaten.SpringBootDemo.controller
 
+import com.nanaten.SpringBootDemo.domain.entity.Article
 import com.nanaten.SpringBootDemo.domain.entity.User
 import com.nanaten.SpringBootDemo.domain.entity.UserRole
 import com.nanaten.SpringBootDemo.domain.repository.ArticleRepository
 import com.nanaten.SpringBootDemo.domain.repository.UserRepository
+import com.nanaten.SpringBootDemo.request.ArticleRequest
 import com.nanaten.SpringBootDemo.service.IUserDetailsService
 import com.nanaten.SpringBootDemo.service.UserDetailsImpl
 import com.nanaten.SpringBootDemo.validator.UserValidator
@@ -18,10 +20,16 @@ import org.springframework.validation.BindingResult
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import java.util.*
 
 @Controller
 @RequestMapping("/user")
 class UserController {
+    val MESSAGE_REGISTER_NORMAL = "正常に投稿できました"
+    val MESSAGE = "message"
+    val ERRORS = "errors"
+    val REQUEST = "request"
+
     @Autowired
     lateinit var userRepository: UserRepository
 
@@ -80,7 +88,8 @@ class UserController {
     }
 
     @GetMapping("/index")
-    fun getUserIndex(@AuthenticationPrincipal userDetailsImpl: UserDetailsImpl,
+    fun getUserIndex(@ModelAttribute atricleRequest: ArticleRequest,
+                     @AuthenticationPrincipal userDetailsImpl: UserDetailsImpl,
                      @RequestParam(value = "page", defaultValue = "0", required = false) page: Int,
                      model: Model): String {
         model.addAttribute("user", userDetailsImpl.user)
@@ -103,5 +112,35 @@ class UserController {
     @GetMapping("/logout")
     fun getUserLogout(): String {
         return "redirect:/"
+    }
+
+    @PostMapping("/article/register")
+    fun userArticleRegister(
+            @Validated @ModelAttribute articleRequest: ArticleRequest,
+            result: BindingResult,
+            @AuthenticationPrincipal userDetailsImpl: UserDetailsImpl,
+            redirectAttributes: RedirectAttributes): String {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", result)
+            redirectAttributes.addFlashAttribute("request", articleRequest)
+
+            return "redirect:/user/index"
+        }
+
+        articleRepository.save(
+                Article(
+                        articleRequest.id,
+                        articleRequest.name,
+                        articleRequest.title,
+                        articleRequest.contents,
+                        articleRequest.articleKey,
+                        Date(),
+                        Date(),
+                        userDetailsImpl.user.id
+                )
+        )
+        redirectAttributes.addFlashAttribute("message", MESSAGE_REGISTER_NORMAL)
+
+        return "redirect:/user/index"
     }
 }
